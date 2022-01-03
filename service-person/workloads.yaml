@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-person
+spec:
+  selector:
+    app: service-person
+  type: NodePort
+  ports:
+    - name: http
+      port: 8080
+      nodePort: 31000
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-person
+spec:
+  selector:
+    matchLabels:
+      app: service-person
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: service-person
+    spec:
+      containers:
+        - name: server
+          image: denyaalpha/service-person
+          ports:
+            - name: http
+              containerPort: 8080
+
+---
